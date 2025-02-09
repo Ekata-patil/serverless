@@ -96,7 +96,8 @@ resource "aws_ecs_task_definition" "ecs_task" {
 
   container_definitions = jsonencode([{
     name  = var.container_name
-    image = var.docker_image:var.image_tag
+    image = image = "${var.docker_image}:${var.image_tag}"
+
     essential = true
     portMappings = [{
       containerPort = 80
