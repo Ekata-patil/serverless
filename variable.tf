@@ -20,3 +20,8 @@ variable "image_tag" {
 variable "docker_iamge"{
     default="nginx"
 }
+
+variable "environment" {
+  description = "The environment to deploy"
+  type        = string
+}
