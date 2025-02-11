@@ -1,5 +1,5 @@
-provider "aws"{
-    region="us-east-1"
+provider "aws" {
+  region = "us-east-1"
 }
 resource "aws_vpc" "my_vpc" {
   cidr_block = "10.0.0.0/16"
@@ -51,14 +51,14 @@ resource "aws_ecs_cluster" "ecs_cluster" {
   name = var.ecs_cluster_name
 }
 resource "aws_iam_role" "ecs_task_execution_role" {
-  name = "ecsTaskExecutionRole"
+  name = "ecsTaskExecutionRole-ekta"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [{
-      Effect = "Allow"
+      Effect    = "Allow"
       Principal = { Service = "ecs-tasks.amazonaws.com" }
-      Action = "sts:AssumeRole"
+      Action    = "sts:AssumeRole"
     }]
   })
 }
@@ -70,6 +70,7 @@ resource "aws_iam_role_policy_attachment" "ecs_execution_role_policy" {
 
 resource "aws_security_group" "ecs_sg" {
   name_prefix = "ecs-sg"
+  vpc_id=aws_vpc.my_vpc.id
 
   ingress {
     from_port   = 80
@@ -96,7 +97,7 @@ resource "aws_ecs_task_definition" "ecs_task" {
 
   container_definitions = jsonencode([{
     name  = var.container_name
-    image = image = "${var.docker_image}:${var.image_tag}"
+    image = "${var.docker_image}:${var.image_tag}"
 
     essential = true
     portMappings = [{
@@ -112,12 +113,10 @@ resource "aws_ecs_service" "ecs_service" {
   launch_type     = "FARGATE"
 
   network_configuration {
-    subnets         = [aws_subnet.public_subnet.id]  # Replace with actual subnet IDs
-    security_groups = [aws_security_group.ecs_sg.id]
+    subnets          = [aws_subnet.public_subnet.id] # Replace with actual subnet IDs
+    security_groups  = [aws_security_group.ecs_sg.id]
     assign_public_ip = true
   }
 
   desired_count = 1
 }
-
-
