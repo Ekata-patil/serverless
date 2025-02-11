@@ -1,3 +1,1 @@
-variable "environment"{
-    default="dev"
-}
+environment = "dev"  # Assign the value
