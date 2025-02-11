@@ -1,3 +1,1 @@
-variable "environment"{
-    default="prod"
-}
+environment = "prod"  # Assign the value
